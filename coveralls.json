@@ -1,0 +1,14 @@
+{
+    "skip_files": [
+      "test/support",
+      "lib/restaurant/repo.ex",
+      "lib/restaurant_web.ex",
+      "lib/restaurant.ex",
+      "lib/restaurant_web/endpoint.ex",
+      "lib/restaurant_web/gettext.ex",
+      "lib/restaurant_web/views/error_helpers.ex",
+      "lib/restaurant_web/end_pon.ex",
+      "lib/restaurant/application.ex",
+      "lib/restaurant_web/channels/user_socket.ex"
+    ]
+  }
