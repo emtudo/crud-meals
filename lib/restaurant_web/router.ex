@@ -1,6 +1,10 @@
 defmodule RestaurantWeb.Router do
   use RestaurantWeb, :router
-  alias RestaurantWeb.Plugs.UUIDChecker
+  alias RestaurantWeb.Plugs.{UserIdChecker, UUIDChecker}
+
+  pipeline :user_id do
+    plug UserIdChecker
+  end
 
   pipeline :api do
     plug :accepts, ["json"]
@@ -10,6 +14,13 @@ defmodule RestaurantWeb.Router do
   scope "/api", RestaurantWeb do
     pipe_through :api
 
+    post "/users", UserCreateController, :handle
+    get "/users/:id", UserShowController, :handle
+    get "/users/:id/meals", UserMealsController, :handle
+    delete "/users/:id", UserDeleteController, :handle
+    put "/users/:id", UserUpdateController, :handle
+
+    pipe_through :user_id
     post "/meals", MealCreateController, :handle
     get "/meals/:id", MealShowController, :handle
     delete "/meals/:id", MealDeleteController, :handle

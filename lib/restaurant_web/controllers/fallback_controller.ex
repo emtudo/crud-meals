@@ -16,4 +16,11 @@ defmodule RestaurantWeb.FallbackController do
     |> put_view(ErrorView)
     |> render("error.json", result: result)
   end
+
+  def call(conn, constraint) do
+    conn
+    |> put_status(:bad_request)
+    |> put_view(ErrorView)
+    |> render("error.json", result: constraint)
+  end
 end

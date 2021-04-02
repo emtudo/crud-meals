@@ -2,7 +2,7 @@ defmodule RestaurantWeb.ErrorView do
   use RestaurantWeb, :view
   import Ecto.Changeset, only: [traverse_errors: 2]
 
-  alias Ecto.Changeset
+  alias Ecto.{Changeset, ConstraintError}
 
   # If you want to customize a particular status code
   # for a certain format, you may uncomment below.
@@ -25,11 +25,23 @@ defmodule RestaurantWeb.ErrorView do
     %{message: message}
   end
 
+  def render("400.json", %{result: %Changeset{} = changeset}) do
+    %{message: "Bad Request", errors: translate_errors(changeset)}
+  end
+
+  def render("400.json", %{result: message}) do
+    %{message: message}
+  end
+
   defp translate_errors(changeset) do
     traverse_errors(changeset, fn {msg, opts} ->
       Enum.reduce(opts, msg, fn {key, value}, acc ->
-        String.replace(acc, "%{#{key}}", to_string(value))
+        String.replace(acc, "%{#{key}}", translate_value(value))
       end)
     end)
   end
+
+  defp translate_value({:parameterized, Ecto.Enum, _map}), do: "option invalid"
+
+  defp translate_value(value), do: to_string(value)
 end
